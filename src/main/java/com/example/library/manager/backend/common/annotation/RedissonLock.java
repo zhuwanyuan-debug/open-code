@@ -9,7 +9,7 @@ import java.util.concurrent.TimeUnit;
 /**
  * 集群场景下使用的分布式锁注解
  *
- * @author westbrook.zhu
+ * @author jluzhuwanyuan@163.com
  * @date 2023/8/1
  */
 @Retention(RetentionPolicy.RUNTIME) // 运行时生效

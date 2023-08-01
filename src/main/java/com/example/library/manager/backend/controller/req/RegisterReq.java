@@ -3,7 +3,6 @@ package com.example.library.manager.backend.controller.req;
 import com.sun.istack.internal.NotNull;
 import io.swagger.annotations.ApiModelProperty;
 import lombok.AllArgsConstructor;
-import lombok.Builder;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 
@@ -33,6 +32,5 @@ public class RegisterReq {
 
     @NotNull
     @ApiModelProperty("权限登记")
-    @Builder.Default
-    private Integer auth = 1  ;
+    private Integer auth;
 }

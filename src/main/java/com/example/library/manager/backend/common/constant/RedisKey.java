@@ -11,7 +11,7 @@ public class RedisKey {
     public static final String USER_TOKEN_STRING = "userToken:uid_%d";
 
     /** 用户token存放 */
-    public static final String BOOK_NAME_STRING = "book:name:string_%d";
+    public static final String BOOK_NAME_STRING = "book:name:string_%s";
 
     public static String getKey(String key, Object... objects) {
         return BASE_KEY + String.format(key, objects);

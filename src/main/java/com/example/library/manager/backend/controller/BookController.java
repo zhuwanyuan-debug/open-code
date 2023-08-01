@@ -31,9 +31,11 @@ public class BookController {
     public List<BookStoreDTO> getBooks(
             @NotNull @Min(1) @RequestParam(value = "page", required = false, defaultValue = "1")
                     Integer page,
-            @NotNull @Min(1) @RequestParam(value = "pageSize", required = false, defaultValue = "20")
+            @NotNull
+                    @Min(1)
+                    @RequestParam(value = "pageSize", required = false, defaultValue = "20")
                     Integer pageSize) {
-        log.info("分页查找图书,page={},size={}",page,pageSize);
+        log.info("分页查找图书,page={},size={}", page, pageSize);
         return bookService.selectByPage(page, pageSize);
     }
 

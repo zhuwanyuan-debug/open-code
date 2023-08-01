@@ -1,6 +1,5 @@
 package com.example.library.manager.backend.service.impl;
 
-import cn.hutool.core.bean.BeanUtil;
 import cn.hutool.core.lang.TypeReference;
 import com.alibaba.fastjson.JSON;
 import com.example.library.manager.backend.common.annotation.RedissonLock;
@@ -36,12 +35,18 @@ public class BookServiceImpl implements BookService<BookStoreDTO> {
     @Override
     public List<BookStoreDTO> selectByPage(Integer page, Integer pageSize) {
         List<BookStoreDTO> res = Lists.newArrayList();
-        List<BookStoreEntity> bookStoreEntities = mapper.selectByPage((page - 1) * pageSize, pageSize);
-       return bookStoreEntities.stream().map(item -> {
-            BookStoreDTO bookStoreDTO = new BookStoreDTO();
-            BeanUtil.copyProperties(new BookStoreDTO(), item);
-            return bookStoreDTO;
-        }).collect(Collectors.toList());
+        List<BookStoreEntity> bookStoreEntities =
+                mapper.selectByPage((page - 1) * pageSize, pageSize);
+        return bookStoreEntities.stream()
+                .map(
+                        item ->
+                                BookStoreDTO.builder()
+                                        .id(item.getId())
+                                        .count(item.getCount())
+                                        .createTime(item.getCreateTime())
+                                        .name(item.getName())
+                                        .build())
+                .collect(Collectors.toList());
     }
 
     @Override
@@ -52,8 +57,18 @@ public class BookServiceImpl implements BookService<BookStoreDTO> {
                 JSON.parseObject(
                         RedisUtils.get(redisKey), new TypeReference<List<BookStoreDTO>>() {});
         if (CollectionUtils.isEmpty(books)) {
-            books = Lists.newArrayList();
-            BeanUtil.copyProperties(books, mapper.selectByNameLike("%" + name + "%"));
+            List<BookStoreEntity> list = mapper.selectByNameLike("%" + name + "%");
+            books =
+                    list.stream()
+                            .map(
+                                    item ->
+                                            BookStoreDTO.builder()
+                                                    .id(item.getId())
+                                                    .count(item.getCount())
+                                                    .createTime(item.getCreateTime())
+                                                    .name(item.getName())
+                                                    .build())
+                            .collect(Collectors.toList());
             RedisUtils.set(name, JSON.toJSONString(books), RedisConstants.EXPIRE_1_DAY_SECOND);
         }
         return books;
