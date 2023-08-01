@@ -43,7 +43,7 @@ public class AuthAspect {
         // 权限校验
         SysUserEntity sysUserEntity =
                 sysUserEntityMapper.selectByPrimaryKey(loginService.getValidUid(token));
-        if (sysUserEntity == null || redissonLock.level() < sysUserEntity.getAuthLevel()) {
+        if (sysUserEntity == null || redissonLock.level() > sysUserEntity.getAuthLevel()) {
             throw new BusinessException(BizErrorEnum.AUTH_LOW_ERROR);
         }
         return joinPoint.proceed();
